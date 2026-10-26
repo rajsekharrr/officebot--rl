@@ -1,0 +1,22 @@
+algo: a2c
+
+total_timesteps: 200000
+eval_freq: 20000
+n_eval_episodes: 20
+checkpoint_freq: 50000
+
+model_kwargs:
+  learning_rate: 0.001
+  n_steps: 16
+  gamma: 0.99
+  gae_lambda: 1.0
+  ent_coef: 0.05            # higher entropy for more exploration
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  rms_prop_eps: 0.00001
+  use_rms_prop: true
+  normalize_advantage: false
+  policy_kwargs:
+    net_arch:
+      - 256
+      - 256

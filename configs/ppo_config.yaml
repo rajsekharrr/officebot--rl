@@ -1,0 +1,25 @@
+algo: ppo
+
+# Training settings
+total_timesteps: 200000
+eval_freq: 20000
+n_eval_episodes: 20
+checkpoint_freq: 50000
+
+# PPO hyperparameters
+model_kwargs:
+  learning_rate: 0.0003
+  n_steps: 1024
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  clip_range_vf: null
+  ent_coef: 0.05           # higher entropy for more exploration
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  policy_kwargs:
+    net_arch:
+      - 256
+      - 256

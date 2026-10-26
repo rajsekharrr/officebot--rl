@@ -1,0 +1,40 @@
+# OfficeBot Environment Configuration
+grid_size: 15
+max_steps: 500
+max_tasks: 5
+
+# Battery system
+battery_initial: 1.0
+battery_drain_per_step: 0.002
+battery_drain_per_move: 0.001
+battery_low_threshold: 0.2
+battery_critical_threshold: 0.05
+charge_rate: 0.05         # per INTERACT action at charging station
+
+# Reward values
+rewards:
+  step_penalty: -0.1
+  move_closer: 0.5
+  move_away: -0.3
+  collision: -5.0
+  pickup_success: 10.0
+  task_complete_delivery: 50.0
+  task_complete_meeting: 40.0
+  battery_efficiency_coef: 0.5   # reduced from 5.0 — charging exploit fix
+  battery_full_bonus: 0.0        # eliminated — was the camping exploit
+  battery_depleted: -20.0
+  all_tasks_bonus: 100.0
+  timeout_penalty: -10.0
+  task_fail_penalty: -10.0
+
+# Task configuration
+randomise_tasks: true
+randomise_layout: false
+
+# Rendering
+render_mode: null
+tile_size: 32
+
+# Random seeds (set per run in train.py)
+seed: 42
+eval_mode: false
