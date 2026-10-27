@@ -189,7 +189,7 @@ class OfficeBotEnv(gym.Env):
             self.collision_count += 1
             return self.config['rewards']['collision']
 
-        cell = self.grid.get(*new_pos)
+        cell = self._get_cell(new_pos)
         if cell is not None and not cell.can_overlap():
             self.collision_count += 1
             return self.config['rewards']['collision']
@@ -376,7 +376,7 @@ class OfficeBotEnv(gym.Env):
 
         # Inner walls (top section divider, row 5)
         for col in range(1, 14):
-            if col not in (2, 6):  # corridor openings
+            if col not in (2, 6, 12):  # corridor openings
                 grid.set(col, 5, Wall())
 
         # Inner walls (bottom section divider, row 9)
@@ -391,12 +391,12 @@ class OfficeBotEnv(gym.Env):
             grid.set(8, row, Wall())
 
         # Place fixed objects
-        grid.set(*COFFEE_MACHINE_POS, CoffeeMachine())
-        grid.set(*PRINTER_POS, Printer())
-        grid.set(*CHARGING_STATION_POS, ChargingStation())
+        grid.set(COFFEE_MACHINE_POS[1], COFFEE_MACHINE_POS[0], CoffeeMachine())
+        grid.set(PRINTER_POS[1], PRINTER_POS[0], Printer())
+        grid.set(CHARGING_STATION_POS[1], CHARGING_STATION_POS[0], ChargingStation())
         for i, pos in enumerate(DESK_POSITIONS):
-            grid.set(*pos, Desk(i))
-        grid.set(*MEETING_TABLE_POS, MeetingTable())
+            grid.set(pos[1], pos[0], Desk(i))
+        grid.set(MEETING_TABLE_POS[1], MEETING_TABLE_POS[0], MeetingTable())
 
         return grid
 
@@ -479,7 +479,7 @@ class OfficeBotEnv(gym.Env):
         # Sample 5 cells: forward-1, forward-2, left, right, behind (relative to agent)
         offsets = self._direction_offsets(radius)
         for r, c in offsets:
-            cell = self.grid.get(r, c) if self._is_valid_pos((r, c)) else None
+            cell = self._get_cell((r, c)) if self._is_valid_pos((r, c)) else None
             if cell is None:
                 view.extend([0.0, 0.0, 0.0, 0.0])
             elif isinstance(cell, Wall):
@@ -489,6 +489,10 @@ class OfficeBotEnv(gym.Env):
             else:
                 view.extend([0.0, 0.0, 0.0, 1.0])
         return np.array(view[:20], dtype=np.float32)
+
+    def _get_cell(self, pos: tuple):
+        """Read a cell using the environment's row/column coordinate convention."""
+        return self.grid.get(pos[1], pos[0])
 
     def _direction_offsets(self, radius: int) -> list:
         """Get 5 cell positions relative to agent's current position and direction."""
