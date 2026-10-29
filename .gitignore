@@ -15,6 +15,10 @@ logs/
 # Results (regenerable)
 results/plots/
 
+# Curated plots published in the README
+!docs/images/
+!docs/images/*.png
+
 # VS Code
 .vscode/
 *.code-workspace
